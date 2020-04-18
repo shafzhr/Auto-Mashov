@@ -1,5 +1,10 @@
 {
     "ClassesPage": "/html/body/mshv-root/mshv-main/mat-sidenav-container/mat-sidenav/div/mshv-main-menu/ul/li[19]/button",
     "ClassesList": "/html/body/mshv-root/mshv-main/mat-sidenav-container/mat-sidenav-content/mshv-student/mshv-student-bbb/mat-card/mat-nav-list",
-    "ClassStartTime": "//div/div[3]/div[2]/span[1]"
+    "ClassStartTime": "//div/div[3]/div[2]/span[1]",
+    "SchoolIdInput": "//*[@id=\"mat-input-2\"]",
+    "SchoolIdBoxes": "//mat-option",
+    "UsernameInput": "//*[@id=\"mat-input-0\"]",
+    "PasswordInput": "//*[@id=\"mat-input-1\"]",
+    "LoginButton": "//*[@id=\"mat-tab-content-0-0\"]/div/div/button"
 }
