@@ -35,9 +35,23 @@ def main():
 
         sorted_classes_times = sorted(times.keys())
         closest = times[sorted_classes_times[0]]
-        while not try_click(closest): pass
         
+        previous_window = driver.window_handles[0]
+        while not try_click(closest): pass
 
+        while len(driver.window_handles) < 2: pass
+        window_after = previous_window
+        for win in driver.window_handles:
+            if win != previous_window:
+                window_after = win
+                break
+        driver.switch_to.window(window_after)
+
+        while not is_element_present(driver, By.XPATH, xpaths["OnlyAudio"]): pass
+        driver.find_element_by_xpath(xpaths["OnlyAudio"]).click()
+
+        print("-----------------------------\nConnected to a class\n-----------------------------")
+        
         input("Press enter to close")
     finally:
         driver.close()
