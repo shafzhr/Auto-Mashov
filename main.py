@@ -1,5 +1,6 @@
 import json
 import time
+import re
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -7,8 +8,12 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import WebDriverException
 from login import mashov_login
 
+
+
 XPATH_FILE = 'xpath.json'
 LOGIN_FILE = 'login.json'
+NOT_STARTED = "This XML file does not appear to have any style information associated with it. The document tree is shown below."
+
 
 def main():
     with open(XPATH_FILE) as f:
@@ -49,7 +54,12 @@ def main():
                     window_after = win
                     break
             driver.switch_to.window(window_after)
-
+            
+            time.sleep(1)
+            regexp = re.compile(r"^<string>.*</string>$")
+            while regexp.search(driver.page_source):
+                driver.refresh()
+            
             while not is_element_present(driver, By.XPATH, xpaths["OnlyAudio"]): pass
             driver.find_element_by_xpath(xpaths["OnlyAudio"]).click()
 
