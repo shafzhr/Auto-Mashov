@@ -6,18 +6,26 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from dateutil.relativedelta import relativedelta
 from login import mashov_login
-
 
 
 XPATH_FILE = 'xpath.json'
 LOGIN_FILE = 'login.json'
 NOT_STARTED = "This XML file does not appear to have any style information associated with it. The document tree is shown below."
-
+timeout = 10
 
 def main():
     with open(XPATH_FILE) as f:
         xpaths = json.load(f)
+
+    today = datetime.today()
+    next_date = next_7am(today)
+    time_delta = (next_date - datetime.now()).total_seconds()
+    print("Sleeping for {} seconds(until {})".format(str(time_delta), next_date))
+    time.sleep(time_delta)
 
     try:
         while True:
@@ -25,50 +33,25 @@ def main():
 
             mashov_login(driver, LOGIN_FILE)
 
-            while not is_element_present(driver, By.XPATH, xpaths["ClassesPage"]): pass
-            driver.find_element_by_xpath(xpaths["ClassesPage"]).click()
+            while not is_element_present(driver, By.XPATH, xpaths["CoronaPage"]): pass
+            driver.find_element_by_xpath(xpaths["CoronaPage"]).click()
 
-            while not is_element_present(driver, By.XPATH, xpaths["ClassesList"]): pass
-            classes = driver.find_element_by_xpath(xpaths["ClassesList"]).find_elements_by_xpath("//a[@href]")
+            while not is_element_present(driver, By.XPATH, xpaths["CheckFever"]): pass
+            while not try_click(driver.find_element_by_xpath(xpaths["CheckFever"])): pass
             
-            times = {}
-            for c in classes:
-                span_start = c.find_element_by_xpath(xpaths["ClassStartTime"])
-                span_end = c.find_element_by_xpath(xpaths["ClassEndTime"])
-                start_time = span_start.text.split(':', 1)[1][1:]
-                end_time = span_end.text.split(':', 1)[1][1:]
-                start_time = datetime.strptime(start_time, "%d/%m/%Y %H:%M")
-                end_time = datetime.strptime(end_time, "%d/%m/%Y %H:%M")
-                times[start_time] = (c, end_time)
+            while not is_element_present(driver, By.XPATH, xpaths["CheckBidud"]): pass
+            while not try_click(driver.find_element_by_xpath(xpaths["CheckBidud"])): pass
 
-            sorted_classes_times = sorted(times.keys())
-            closest = times[sorted_classes_times[0]][0]
-            
-            previous_window = driver.window_handles[0]
-            while not try_click(closest): pass
 
-            while len(driver.window_handles) < 2: pass
-            window_after = previous_window
-            for win in driver.window_handles:
-                if win != previous_window:
-                    window_after = win
-                    break
-            driver.switch_to.window(window_after)
-            
-            time.sleep(1)
-            regexp = re.compile(r"^<string>.*</string>$")
-            while regexp.search(driver.page_source):
-                driver.refresh()
-            
-            while not is_element_present(driver, By.XPATH, xpaths["OnlyAudio"]): pass
-            driver.find_element_by_xpath(xpaths["OnlyAudio"]).click()
+            while not is_element_present(driver, By.XPATH, xpaths["CoronaAccept"]): pass
+            driver.find_element_by_xpath(xpaths["CoronaAccept"]).click()
 
-            print("-----------------------------\nConnected to a class\n-----------------------------")
-            time_delta = (times[sorted_classes_times[0]][1] - datetime.now()).total_seconds()
-            print("Sleeping for {} seconds(until {})".format(str(time_delta), str(times[sorted_classes_times[0]][1])))
+            print("-----------------------------\Have fun in class(jk, it's not possible)!\n-----------------------------")
+            today = datetime.today()
+            next_date = next_7am(today)
+            time_delta = (next_date - datetime.now()).total_seconds()
+            print("Sleeping for {} seconds(until {})".format(str(time_delta), next_date))
             time.sleep(time_delta)
-            driver.close()
-            driver.close()
     finally:
         for win in driver.window_handles:
             driver.close()
@@ -88,6 +71,12 @@ def try_click(element):
         return True
     except WebDriverException:
         return False
+
+
+def next_7am(dt):
+    relative_days = (dt.hour >= 7)
+    absolute_kwargs = dict(hour=7, minute=1, second=0, microsecond=0)
+    return dt + relativedelta(days=relative_days, **absolute_kwargs)
 
 
 if __name__ == "__main__":

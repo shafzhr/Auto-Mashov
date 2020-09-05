@@ -4,9 +4,13 @@
     "ClassStartTime": ".//div/div[3]/div[2]/span[1]",
     "ClassEndTime": ".//div/div[3]/div[2]/span[2]",
     "OnlyAudio": "/html/body/div[2]/div/div/div[1]/div/div/span/button[2]",
-    "SchoolIdInput": "//*[@id=\"mat-input-2\"]",
+    "SchoolIdInput": "//*[@id=\"mat-input-3\"]",
     "SchoolIdBoxes": "//mat-option",
     "UsernameInput": "//*[@id=\"mat-input-0\"]",
-    "PasswordInput": "//*[@id=\"mat-input-1\"]",
-    "LoginButton": "//*[@id=\"mat-tab-content-0-0\"]/div/div/button"
+    "PasswordInput": "//*[@id=\"mat-input-4\"]",
+    "LoginButton": "//*[@id=\"mat-tab-content-0-0\"]/div/div/button",
+    "CoronaPage": "/html/body/mshv-root/mshv-main/mat-sidenav-container/mat-sidenav/div/mshv-main-menu/ul/li[2]/button/span[1]/div/span/span",
+    "CheckFever": "//*[@id=\"mat-checkbox-1\"]",
+    "CheckBidud": "//*[@id=\"mat-checkbox-2\"]",
+    "CoronaAccept": "/html/body/mshv-root/mshv-main/mat-sidenav-container/mat-sidenav-content/mshv-students-covid-clearance/mat-card/mat-card-actions/button"
 }
