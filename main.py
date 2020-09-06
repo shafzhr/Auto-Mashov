@@ -52,6 +52,7 @@ def main():
             time_delta = (next_date - datetime.now()).total_seconds()
             print("Sleeping for {} seconds(until {})".format(str(time_delta), next_date))
             time.sleep(time_delta)
+            driver.close()
     finally:
         for win in driver.window_handles:
             driver.close()
